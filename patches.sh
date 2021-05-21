@@ -18,6 +18,12 @@ if [ $DEVICE = 'r2s' ]; then
     echo -e "\toption governor0 'schedutil'" >> package/feeds/luci/luci-app-cpufreq/root/etc/config/cpufreq
     echo -e "\toption minfreq0 '816000'" >> package/feeds/luci/luci-app-cpufreq/root/etc/config/cpufreq
     echo -e "\toption maxfreq0 '1512000'\n" >> package/feeds/luci/luci-app-cpufreq/root/etc/config/cpufreq
+    # 交换 LAN/WAN 口
+    sed -i 's,"eth1" "eth0","eth0" "eth1",g' target/linux/rockchip/armv8/base-files/etc/board.d/02_network
+    sed -i "s,'eth1' 'eth0','eth0' 'eth1',g" target/linux/rockchip/armv8/base-files/etc/board.d/02_network
+    # 添加 R2S GPU 驱动
+    rm -rf ./package/kernel/linux/modules/video.mk
+    wget -P package/kernel/linux/modules/ https://github.com/immortalwrt/immortalwrt/raw/master/package/kernel/linux/modules/video.mk
 fi
 
 if [ $DEVICE = 'r4s' ]; then
